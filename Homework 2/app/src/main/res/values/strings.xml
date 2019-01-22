@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Homework 2</string>
+    <string-array name="admins">
+        <item>admin@gmail.com</item>
+        <item>test@fsu.edu</item>
+        <item>admin@fsu.edu</item>
+    </string-array>
+    <string-array name="classes">
+        <item></item>
+        <item>COP 3014</item>
+        <item>COP 3330</item>
+        <item>COP 4530</item>
+    </string-array>
+</resources>
