@@ -25,10 +25,10 @@ public class NotesListFragment extends Fragment {
         myAdapter = new MyNoteArrayAdapter(getActivity(), R.layout.row_note);
 
         // dummy data
-        MyNote note = new MyNote("My First Note", "Body of my first note", "Timestamp");
-        myAdapter.add(note);
-        note = new MyNote("My Second Note", "Body of my second note", "Timestamp");
-        myAdapter.add(note);
+        for(int i = 1; i <= 50; i++) {
+            MyNote note = new MyNote("Note #".concat(Integer.toString(i)), "Body of note #".concat(Integer.toString(i)), "Timestamp");
+            myAdapter.add(note);
+        }
 
         listView.setAdapter(myAdapter);
     }

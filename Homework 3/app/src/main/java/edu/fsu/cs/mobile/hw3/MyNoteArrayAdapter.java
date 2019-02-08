@@ -1,6 +1,8 @@
 package edu.fsu.cs.mobile.hw3;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
@@ -36,8 +40,8 @@ public class MyNoteArrayAdapter extends ArrayAdapter<MyNote> {
             viewHolder = new MyNoteHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.row_note, parent, false);
-            viewHolder.title = convertView.findViewById(R.id.textView_title);
-            viewHolder.time = convertView.findViewById(R.id.textView_time);
+            viewHolder.title = convertView.findViewById(R.id.row_textView_title);
+            viewHolder.time = convertView.findViewById(R.id.row_textView_time);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (MyNoteHolder) convertView.getTag();
@@ -49,9 +53,19 @@ public class MyNoteArrayAdapter extends ArrayAdapter<MyNote> {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // display ViewNoteFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("title", item.getTitle());
+                bundle.putString("timestamp", item.getTime());
+                bundle.putString("note", item.getNote());
 
-//                notifyDataSetChanged();
+                // display ViewNoteFragment
+                FragmentManager manager = ((Activity) myContext).getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                ViewNoteFragment fragment = new ViewNoteFragment();
+                fragment.setArguments(bundle);
+                trans.replace(R.id.fragment_container, fragment, "view_note");
+                trans.addToBackStack(null);
+                trans.commit();
             }
         });
 

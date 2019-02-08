@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textColor="#1d1d1d"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/textView_timestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Timestamp"
+                android:textColor="#a1a1a1" />
+
+            <TextView
+                android:id="@+id/textView_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="6sp"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit mi, facilisis ut dictum at, finibus convallis purus. Morbi mattis ligula id ligula vehicula molestie. Aenean sit amet eros vitae est dignissim vestibulum at quis lectus. Maecenas ultrices dapibus condimentum. Duis in eros id turpis elementum auctor. In nulla orci, suscipit vel pellentesque non, dictum quis orci. Ut in porta dui. Duis eu dapibus mauris. Suspendisse ac mauris justo. Pellentesque elementum sem ac justo dignissim, in laoreet nibh euismod. Praesent sed quam hendrerit, congue tortor non, fermentum enim. Nulla facilisi. Duis condimentum magna vel quam vestibulum, eu hendrerit neque faucibus.  "
+                android:textColor="#595959"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button_edit"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:layout_weight="0"
+        android:text="Edit Note" />
+
+</LinearLayout>
