@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditNoteActivity">
+            <intent-filter>
+                <action android:name="edu.fsu.cs.mobile.hw3.EDIT_NOTE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

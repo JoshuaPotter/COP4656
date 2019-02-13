@@ -1,18 +1,17 @@
 package edu.fsu.cs.mobile.hw3;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 
 import java.util.ArrayList;
 
@@ -59,12 +58,12 @@ public class MyNoteArrayAdapter extends ArrayAdapter<MyNote> {
                 bundle.putString("note", item.getNote());
 
                 // display ViewNoteFragment
-                FragmentManager manager = ((Activity) myContext).getFragmentManager();
+                FragmentManager manager = ((MainActivity) myContext).getSupportFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
                 ViewNoteFragment fragment = new ViewNoteFragment();
                 fragment.setArguments(bundle);
-                trans.replace(R.id.fragment_container, fragment, "view_note");
-                trans.addToBackStack(null);
+                trans.replace(R.id.fragment_container, fragment, ViewNoteFragment.TAG);
+                trans.addToBackStack(NotesListFragment.TAG);
                 trans.commit();
             }
         });

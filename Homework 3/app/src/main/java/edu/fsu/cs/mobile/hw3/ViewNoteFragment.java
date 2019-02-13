@@ -1,6 +1,6 @@
 package edu.fsu.cs.mobile.hw3;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class ViewNoteFragment extends Fragment {
+
+    public static final String TAG = NotesListFragment.class.getCanonicalName();
+
     private String title;
     private String timestamp;
     private String note;
