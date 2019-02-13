@@ -27,13 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (manager.getBackStackEntryCount() > 0) {
-            Toast.makeText(this, "Pop Back Stack",
-                    Toast.LENGTH_SHORT).show();
             manager.popBackStack();
-//            FragmentTransaction trans = manager.beginTransaction();
-//            trans.remove(manager.findFragmentByTag(ViewNoteFragment.TAG));
-//            trans.attach(manager.findFragmentByTag(NotesListFragment.TAG));
-//            trans.commit();
         } else {
             super.onBackPressed();
         }

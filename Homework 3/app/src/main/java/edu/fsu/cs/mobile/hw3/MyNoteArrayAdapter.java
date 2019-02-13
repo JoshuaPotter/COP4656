@@ -62,8 +62,9 @@ public class MyNoteArrayAdapter extends ArrayAdapter<MyNote> {
                 FragmentTransaction trans = manager.beginTransaction();
                 ViewNoteFragment fragment = new ViewNoteFragment();
                 fragment.setArguments(bundle);
-                trans.replace(R.id.fragment_container, fragment, ViewNoteFragment.TAG);
                 trans.addToBackStack(NotesListFragment.TAG);
+                trans.hide(manager.findFragmentByTag(NotesListFragment.TAG));
+                trans.add(R.id.fragment_container, fragment, ViewNoteFragment.TAG);
                 trans.commit();
             }
         });
