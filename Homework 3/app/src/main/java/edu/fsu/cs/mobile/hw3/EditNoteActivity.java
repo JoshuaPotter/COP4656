@@ -18,6 +18,7 @@ public class EditNoteActivity extends AppCompatActivity {
     private EditText title;
     private EditText note;
     private Button submit;
+    private MyNote old_note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +35,18 @@ public class EditNoteActivity extends AppCompatActivity {
             MyNote thisNote = intent.getParcelableExtra("note");
             title.setText(thisNote.getTitle());
             note.setText(thisNote.getNote());
+
+            // store old note for comparison
+            old_note = new MyNote(thisNote.getTitle(), thisNote.getNote(), thisNote.getTime());
+        } else {
+            old_note = null;
         }
 
         submit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 boolean error = false;
-                if(title.getText().equals("") || note.getText().equals("")) {
+                if(title.getText().toString().equals("") || note.getText().toString().equals("")) {
                     error = true;
                     Toast.makeText(EditNoteActivity.this, "Error: empty fields",
                             Toast.LENGTH_SHORT).show();
@@ -49,11 +55,15 @@ public class EditNoteActivity extends AppCompatActivity {
                 if(!error) {
                     Date date = new Date();
                     Timestamp timestamp = new Timestamp(date.getTime());
-                    MyNote thisNote = new MyNote(title.getText().toString(), note.getText().toString(), timestamp.toString());
+
+                    MyNote new_note = new MyNote(title.getText().toString(), note.getText().toString(), timestamp.toString());
 
                     // send thisNote back to where this activity was called from
                     Intent intent = new Intent();
-                    intent.putExtra("note", thisNote);
+                    if(old_note != null) {
+                        intent.putExtra("old_note", old_note);
+                    }
+                    intent.putExtra("note", new_note);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

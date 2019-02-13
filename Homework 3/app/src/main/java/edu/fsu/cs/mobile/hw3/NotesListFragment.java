@@ -11,14 +11,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import static android.app.Activity.RESULT_CANCELED;
 
 public class NotesListFragment extends Fragment {
-
     public static final String TAG = NotesListFragment.class.getCanonicalName();
 
-    private static final int NEW_NOTE = 100;
-    private static final int EDIT_NOTE = 101;
+    public static final int NEW_NOTE = 100;
+    public static final int EDIT_NOTE = 101;
 
     private Button addNote;
 
@@ -37,9 +39,12 @@ public class NotesListFragment extends Fragment {
         MainActivity.myAdapter = new MyNoteArrayAdapter(getActivity(), R.layout.row_note);
 
         // dummy data
+//        Date date = new Date();
+//        Timestamp timestamp;
 //        for(int i = 1; i <= 50; i++) {
-//            MyNote note = new MyNote("Note #".concat(Integer.toString(i)), "Body of note #".concat(Integer.toString(i)), "Timestamp");
-//            MainActivity.MainActivity.myAdapter.add(note);
+//            timestamp = new Timestamp(date.getTime());
+//            MyNote note = new MyNote("Note #".concat(Integer.toString(i)), "Body of note #".concat(Integer.toString(i)), timestamp.toString());
+//            MainActivity.myAdapter.add(note);
 //        }
 
         listView.setAdapter(MainActivity.myAdapter);
@@ -67,9 +72,6 @@ public class NotesListFragment extends Fragment {
         else if (requestCode == NEW_NOTE) {
             MyNote thisNote = data.getParcelableExtra("note");
             MainActivity.myAdapter.add(thisNote);
-        }
-        else if (requestCode == EDIT_NOTE) {
-            MyNote thisNote = data.getParcelableExtra("note");
         }
     }
 }

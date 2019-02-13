@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
     public static MyNoteArrayAdapter myAdapter;
     public static final String TAG = "MainActivity";
+
     private FragmentManager manager;
 
     @Override
