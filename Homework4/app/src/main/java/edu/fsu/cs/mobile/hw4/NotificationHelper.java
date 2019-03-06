@@ -1,6 +1,5 @@
 package edu.fsu.cs.mobile.hw4;
 
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -22,7 +21,7 @@ class NotificationHelper {
                 .findFragmentByTag(TriviaListFragment.TAG)).getTriviaAdapter();
         int size = adapter.getCount();
 
-        // Create notification and assign to channel
+        // Setup notification content
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(size + " new questions")
                 .setContentText("Fetched " + size + " new questions, time to get your trivia on.")
@@ -50,6 +49,7 @@ class NotificationHelper {
                 .findFragmentByTag(TriviaListFragment.TAG)).getTriviaAdapter();
         int size = adapter.getCount();
 
+        // Setup notification content
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle("Current Game (Score: )")
                 .setContentText("Questions: " + size)
@@ -77,6 +77,7 @@ class NotificationHelper {
                 .findFragmentByTag(TriviaListFragment.TAG)).getTriviaAdapter();
         int size = adapter.getCount();
 
+        // Setup notification content
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle("Current Game (Score: )")
                 .setContentText("Questions: " + size);

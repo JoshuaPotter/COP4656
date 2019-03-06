@@ -1,4 +1,3 @@
-//TriviaItem
 package edu.fsu.cs.mobile.hw4;
 
 import android.os.Parcel;

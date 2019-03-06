@@ -53,8 +53,11 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         } else {
             viewHolder = (TriviaItemHolder) convertView.getTag();
         }
-        final String difficulty = item.getDifficulty().substring(0,1).toUpperCase() + item.getDifficulty().substring(1);
-        switch(difficulty) {
+        item.setDifficulty(item.getDifficulty().substring(0,1).toUpperCase() + item.getDifficulty().substring(1));
+        viewHolder.difficulty.setText(item.getDifficulty());
+        viewHolder.question.setText(item.getQuestion());
+        viewHolder.category.setText(item.getCategory());
+        switch(item.getDifficulty()) {
             case "Easy":
                 viewHolder.difficulty.setTextColor(Color.parseColor("#0eea87"));
                 break;
@@ -67,9 +70,6 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
             default:
                 break;
         }
-        viewHolder.difficulty.setText(difficulty);
-        viewHolder.question.setText(item.getQuestion());
-        viewHolder.category.setText(item.getCategory());
 
         // Add onclick for each item in list
         convertView.setOnClickListener(new View.OnClickListener() {

@@ -1,12 +1,9 @@
-//OpentdbParser
 package edu.fsu.cs.mobile.hw4;
 
 import android.text.Html;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 class OpentdbParser {

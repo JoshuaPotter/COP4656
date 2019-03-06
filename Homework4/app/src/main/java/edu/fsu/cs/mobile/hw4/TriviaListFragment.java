@@ -8,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
 import org.json.JSONException;
-
 import java.util.ArrayList;
 
 public class TriviaListFragment extends Fragment {
@@ -32,7 +30,7 @@ public class TriviaListFragment extends Fragment {
 
         try {
             // Populate ArrayList of TriviaItem from parser
-            // @Param: String response
+            // @Param: String response (json)
             ArrayList<TriviaItem> parsedItems = OpentdbParser.parseTriviaItems(OpentdbParser.SAMPLE_ITEMS);
 
             // Add TriviaItems to adapter
