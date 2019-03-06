@@ -47,7 +47,7 @@
             android:ems="10"
             android:gravity="top"
             android:hint="Enter the body of your note"
-            android:inputType="text|textLongMessage"
+            android:inputType="text|textMultiLine|textLongMessage"
             android:padding="8dp"
             android:singleLine="false"
             android:textColor="#1d1d1d"

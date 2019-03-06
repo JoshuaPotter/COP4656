@@ -46,9 +46,9 @@ public class EditNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean error = false;
-                if(title.getText().toString().equals("") || note.getText().toString().equals("")) {
+                if(title.getText().toString().equals("")) {
                     error = true;
-                    Toast.makeText(EditNoteActivity.this, "Error: empty fields",
+                    Toast.makeText(EditNoteActivity.this, "Error: Title cannot be empty",
                             Toast.LENGTH_SHORT).show();
                 }
 
