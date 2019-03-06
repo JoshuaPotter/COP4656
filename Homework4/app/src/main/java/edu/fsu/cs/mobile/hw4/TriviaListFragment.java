@@ -35,15 +35,16 @@ public class TriviaListFragment extends Fragment {
             // @Param: String response
             ArrayList<TriviaItem> parsedItems = OpentdbParser.parseTriviaItems(OpentdbParser.SAMPLE_ITEMS);
 
-
             // Add TriviaItems to adapter
             for(TriviaItem item : parsedItems) {
                 triviaAdapter.add(item);
             }
 
-            // Show notifications
+            // Show notification for new questions
             NotificationHelper.fetchedQuestions((MainActivity) getActivity());
-            NotificationHelper.trackGame((MainActivity) getActivity());
+
+            // Start ongoing notification to track game session
+            NotificationHelper.gameSession((MainActivity) getActivity());
 
         } catch (JSONException event) {
             System.out.println("/------------------------ Error: API parser failed. --------------------------/");

@@ -1,8 +1,12 @@
 package edu.fsu.cs.mobile.hw4;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +37,9 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final TriviaItem item = getItem(position);
-        TriviaItemHolder viewHolder;
 
+        // Populate list with each element
+        TriviaItemHolder viewHolder;
         if(convertView == null) {
             viewHolder = new TriviaItemHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -48,39 +53,48 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         } else {
             viewHolder = (TriviaItemHolder) convertView.getTag();
         }
-
+        final String difficulty = item.getDifficulty().substring(0,1).toUpperCase() + item.getDifficulty().substring(1);
+        switch(difficulty) {
+            case "Easy":
+                viewHolder.difficulty.setTextColor(Color.parseColor("#0eea87"));
+                break;
+            case "Medium":
+                viewHolder.difficulty.setTextColor(Color.parseColor("#dd8118"));
+                break;
+            case "Hard":
+                viewHolder.difficulty.setTextColor(Color.parseColor("#ea0909"));
+                break;
+            default:
+                break;
+        }
+        viewHolder.difficulty.setText(difficulty);
         viewHolder.question.setText(item.getQuestion());
         viewHolder.category.setText(item.getCategory());
-        viewHolder.difficulty.setText(item.getDifficulty());
 
-/*
+        // Add onclick for each item in list
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("question", item.getQuestion());
-//                bundle.putString("category", item.getCategory());
-//                bundle.putString("difficulty", item.getDifficulty());
-//                bundle.putString("correct answers", item.getCorrectAnswer());
-//                bundle.putStringArrayList("incorrect answers", item.getIncorrectAnswers());
-                // send parcelable `item` object to fragment
+                // Send parcelable `item` object to fragment
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("trivia_item", item);
 
-                // display TriviaItemFragment
+                // Display TriviaItemFragment
                 FragmentManager manager = ((MainActivity) myContext).getSupportFragmentManager();
                 FragmentTransaction trans = manager.beginTransaction();
 
-                // create new fragment and set arguments
+                // Create new fragment and set arguments
                 TriviaItemFragment fragment = new TriviaItemFragment();
                 fragment.setArguments(bundle);
 
-                // hide Trivia List fragment and show Trivia Item fragment
+                // Hide Trivia List fragment and show Trivia Item fragment
                 trans.addToBackStack(TriviaListFragment.TAG);
                 trans.hide(manager.findFragmentByTag(TriviaListFragment.TAG));
                 trans.add(R.id.fragment_container, fragment, TriviaItemFragment.TAG);
                 trans.commit();
             }
         });
-*/
+
         return convertView;
     }
 
@@ -113,7 +127,6 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         } else {
             triviaItems.add(item);
         }
-
         notifyDataSetChanged();
     }
 }

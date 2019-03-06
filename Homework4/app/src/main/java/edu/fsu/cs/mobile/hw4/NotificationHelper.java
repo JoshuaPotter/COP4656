@@ -39,7 +39,7 @@ class NotificationHelper {
     }
 
     // Display number of remaining questions, score, and elapsed time
-    static void trackGame(AppCompatActivity activity) {
+    static void gameSession(AppCompatActivity activity) {
         final int NOTIFICATION_ID = 1;
         final String CHANNEL_ID = "game_tracker";
         final String CHANNEL_NAME = "Game Tracker";
@@ -67,7 +67,7 @@ class NotificationHelper {
         nm.notify(NOTIFICATION_ID, builder.build());
     }
 
-    static void updateGame(AppCompatActivity activity) {
+    static void updateSession(AppCompatActivity activity) {
         final int NOTIFICATION_ID = 1;
         final String CHANNEL_ID = "game_tracker";
         final Context context = activity.getApplicationContext();
