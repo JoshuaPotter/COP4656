@@ -1,14 +1,9 @@
 // TriviaListFragment
 package edu.fsu.cs.mobile.hw4;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +18,7 @@ public class TriviaListFragment extends Fragment {
     private TriviaItemArrayAdapter triviaAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_trivia_list, container, false);
     }
@@ -40,12 +34,17 @@ public class TriviaListFragment extends Fragment {
             // Populate ArrayList of TriviaItem from parser
             // @Param: String response
             ArrayList<TriviaItem> parsedItems = OpentdbParser.parseTriviaItems(OpentdbParser.SAMPLE_ITEMS);
-            notificationFetchedQuestions(parsedItems.size());
+
 
             // Add TriviaItems to adapter
             for(TriviaItem item : parsedItems) {
                 triviaAdapter.add(item);
             }
+
+            // Show notifications
+            NotificationHelper.fetchedQuestions((MainActivity) getActivity());
+            NotificationHelper.trackGame((MainActivity) getActivity());
+
         } catch (JSONException event) {
             System.out.println("/------------------------ Error: API parser failed. --------------------------/");
         }
@@ -57,30 +56,4 @@ public class TriviaListFragment extends Fragment {
         return triviaAdapter;
     }
 
-    // Display number of fetched questions in a notification
-    public void notificationFetchedQuestions(Integer i) {
-        final String CHANNEL_ID = "new_questions";
-        final String CHANNEL_NAME = "New Questions";
-
-        // Create notification and assign to channel
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
-                .setContentTitle(i + " new questions")
-                .setContentText("Fetched " + i + " new questions.")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setSmallIcon(android.R.color.transparent)
-                .setWhen(System.currentTimeMillis())
-                .setShowWhen(true)
-                .setAutoCancel(true);
-
-        // Create the channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        // Push the notification
-        NotificationManagerCompat nm = NotificationManagerCompat.from(getActivity());
-        nm.notify(0, builder.build());
-    }
 }

@@ -1,11 +1,8 @@
 package edu.fsu.cs.mobile.hw4;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +38,6 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         if(convertView == null) {
             viewHolder = new TriviaItemHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-
             convertView = inflater.inflate(R.layout.row_trivia_item, parent, false);
 
             viewHolder.question = convertView.findViewById(R.id.row_textView_question);
@@ -56,6 +52,7 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         viewHolder.question.setText(item.getQuestion());
         viewHolder.category.setText(item.getCategory());
         viewHolder.difficulty.setText(item.getDifficulty());
+
 /*
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
