@@ -58,10 +58,30 @@ class NotificationHelper {
                 .setWhen(System.currentTimeMillis())
                 .setUsesChronometer(true)
                 .setShowWhen(true)
-                .setOngoing(true);
+                .setOngoing(true)
+                .setOnlyAlertOnce(true);
 
         // Create channel and push notification
         createNotificationChannel(CHANNEL_ID, CHANNEL_NAME, context);
+        NotificationManagerCompat nm = NotificationManagerCompat.from(context);
+        nm.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    static void updateGame(AppCompatActivity activity) {
+        final int NOTIFICATION_ID = 1;
+        final String CHANNEL_ID = "game_tracker";
+        final Context context = activity.getApplicationContext();
+
+        // Get TriviaItemArrayAdapter from TriviaListFragment
+        TriviaItemArrayAdapter adapter = ((TriviaListFragment) activity.getSupportFragmentManager()
+                .findFragmentByTag(TriviaListFragment.TAG)).getTriviaAdapter();
+        int size = adapter.getCount();
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentTitle("Current Game (Score: )")
+                .setContentText("Questions: " + size);
+
+        // Create channel and push notification
         NotificationManagerCompat nm = NotificationManagerCompat.from(context);
         nm.notify(NOTIFICATION_ID, builder.build());
     }
