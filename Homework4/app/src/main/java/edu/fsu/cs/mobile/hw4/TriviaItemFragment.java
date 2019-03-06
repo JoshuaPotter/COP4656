@@ -1,13 +1,20 @@
 package edu.fsu.cs.mobile.hw4;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class TriviaItemFragment extends Fragment {
     public static final String TAG = TriviaItemFragment.class.getCanonicalName();
@@ -36,19 +43,76 @@ public class TriviaItemFragment extends Fragment {
         question.setText(item.getQuestion());
         category.setText(item.getCategory());
         difficulty.setText(item.getDifficulty());
+        Context context = getContext();
         switch(item.getDifficulty()) {
             case "Easy":
-                difficulty.setTextColor(Color.parseColor("#0eea87"));
+                difficulty.setTextColor(ContextCompat.getColor(context, R.color.colorGreen));
                 break;
             case "Medium":
-                difficulty.setTextColor(Color.parseColor("#dd8118"));
+                difficulty.setTextColor(ContextCompat.getColor(context, R.color.colorYellow));
                 break;
             case "Hard":
-                difficulty.setTextColor(Color.parseColor("#ea0909"));
+                difficulty.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
                 break;
             default:
                 break;
         }
 
+        // Consolidate possible answers and shuffle
+        ArrayList<String> possibleAnswers = new ArrayList<>();
+        for(String answer : item.getIncorrectAnswers()) {
+            possibleAnswers.add(answer);
+        }
+        possibleAnswers.add(item.getCorrectAnswer());
+        Collections.shuffle(possibleAnswers);
+
+        // Create buttons for possible answers
+        LinearLayout buttonContainer = view.findViewById(R.id.linearLayout_choice);
+        for(String answer : possibleAnswers) {
+            createBtn(answer, buttonContainer);
+        }
+
+        // Output answer
+        System.out.println("Answer: " + item.getCorrectAnswer());
+    }
+
+    public void createBtn(String text, LinearLayout container) {
+        Button btn = new Button(getActivity().getApplicationContext());
+        btn.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        btn.setText(text);
+        btn.setPadding(20, 20, 20, 20);
+
+        // Set onclick listener
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Button btn = (Button) view;
+                TriviaListFragment fragment = ((TriviaListFragment) getActivity().getSupportFragmentManager()
+                        .findFragmentByTag(TriviaListFragment.TAG));
+
+                if(btn.getText().equals(item.getCorrectAnswer())) {
+                    // Selected correct answer, update score
+                    btn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                    btn.setTextColor(Color.WHITE);
+                    fragment.incrementScore();
+                } else {
+                    btn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+                    btn.setTextColor(Color.WHITE);
+                }
+
+                // Disable all btns once selection is made
+                LinearLayout buttonContainer = view.getRootView().findViewById(R.id.linearLayout_choice);
+                for(int i = 0; i < buttonContainer.getChildCount(); i++) {
+                    Button v = (Button) buttonContainer.getChildAt(i);
+                    v.setEnabled(false);
+                }
+
+                // Remove item from triviaItems
+                TriviaItemArrayAdapter adapter = fragment.getTriviaAdapter();
+                adapter.remove(item);
+                NotificationHelper.gameSession((MainActivity) getActivity());
+            }
+        });
+        container.addView(btn);
     }
 }

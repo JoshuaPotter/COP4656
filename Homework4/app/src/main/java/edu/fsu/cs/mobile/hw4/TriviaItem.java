@@ -99,7 +99,9 @@ public class TriviaItem implements Parcelable {
     }
 
     public void setIncorrectAnswers(ArrayList<String> incorrectAnswers) {
-        this.incorrectAnswers = incorrectAnswers;
+        for(String answer : incorrectAnswers) {
+            this.incorrectAnswers.add(answer);
+        }
     }
 
     public String getCorrectAnswer() {

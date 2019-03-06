@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class TriviaListFragment extends Fragment {
     public static final String TAG = TriviaListFragment.class.getCanonicalName();
     private TriviaItemArrayAdapter triviaAdapter;
+    private int score;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +45,9 @@ public class TriviaListFragment extends Fragment {
             // Start ongoing notification to track game session
             NotificationHelper.gameSession((MainActivity) getActivity());
 
+            // Set score to 0
+            score = 0;
+
         } catch (JSONException event) {
             System.out.println("/------------------------ Error: API parser failed. --------------------------/");
         }
@@ -55,4 +59,7 @@ public class TriviaListFragment extends Fragment {
         return triviaAdapter;
     }
 
+    public void incrementScore() { score++; }
+
+    public int getScore() { return score; }
 }

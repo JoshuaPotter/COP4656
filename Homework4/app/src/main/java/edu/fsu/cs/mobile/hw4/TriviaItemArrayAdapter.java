@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,15 +58,16 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         viewHolder.difficulty.setText(item.getDifficulty());
         viewHolder.question.setText(item.getQuestion());
         viewHolder.category.setText(item.getCategory());
+        Context context = getContext();
         switch(item.getDifficulty()) {
             case "Easy":
-                viewHolder.difficulty.setTextColor(Color.parseColor("#0eea87"));
+                viewHolder.difficulty.setTextColor(ContextCompat.getColor(context, R.color.colorGreen));
                 break;
             case "Medium":
-                viewHolder.difficulty.setTextColor(Color.parseColor("#dd8118"));
+                viewHolder.difficulty.setTextColor(ContextCompat.getColor(context, R.color.colorYellow));
                 break;
             case "Hard":
-                viewHolder.difficulty.setTextColor(Color.parseColor("#ea0909"));
+                viewHolder.difficulty.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
                 break;
             default:
                 break;
@@ -126,6 +128,15 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
             triviaItems.set(idx, item);
         } else {
             triviaItems.add(item);
+        }
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void remove(@Nullable TriviaItem item) {
+        int idx = getPosition(item);
+        if(idx >= 0 && idx < triviaItems.size()) {
+            triviaItems.remove(idx);
         }
         notifyDataSetChanged();
     }
