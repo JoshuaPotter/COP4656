@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -80,7 +81,9 @@ public class TriviaItemFragment extends Fragment {
         Button btn = new Button(getActivity().getApplicationContext());
         btn.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         btn.setText(text);
-        btn.setPadding(20, 20, 20, 20);
+        LinearLayout.LayoutParams parameter = (LinearLayout.LayoutParams) btn.getLayoutParams();
+        parameter.setMargins(0,0,0,10);
+        btn.setLayoutParams(parameter);
 
         // Set onclick listener
         btn.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +107,10 @@ public class TriviaItemFragment extends Fragment {
                 LinearLayout buttonContainer = view.getRootView().findViewById(R.id.linearLayout_choice);
                 for(int i = 0; i < buttonContainer.getChildCount(); i++) {
                     Button v = (Button) buttonContainer.getChildAt(i);
+                    if(v.getText().equals(item.getCorrectAnswer())) {
+                        v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                        v.setTextColor(Color.WHITE);
+                    }
                     v.setEnabled(false);
                 }
 

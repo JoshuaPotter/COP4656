@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 class NotificationHelper {
     private static boolean session = false;
     private static long sessionStartTime;
+    private static long sessionEndTime;
 
     // Display number of fetched questions in a notification
     static void fetchedQuestions(AppCompatActivity activity) {
@@ -59,7 +60,7 @@ class NotificationHelper {
             session = true;
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-        builder.setContentTitle("Current Score: " + fragment.getScore() + ")")
+        builder.setContentTitle("Current Score: " + fragment.getScore() + "")
                 .setContentText("Questions Remaining: " + size)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setShowWhen(true)
@@ -68,7 +69,7 @@ class NotificationHelper {
 
         // Set chronometer if game is still going, otherwise, disable
         if(adapter.getCount() == 0) {
-            long sessionEndTime = System.currentTimeMillis();
+            sessionEndTime = System.currentTimeMillis();
             builder.setUsesChronometer(false)
                     .setWhen(sessionEndTime);
         } else {
