@@ -15,6 +15,9 @@ public class TriviaListFragment extends Fragment {
     public static final String TAG = TriviaListFragment.class.getCanonicalName();
     private TriviaItemArrayAdapter triviaAdapter;
     private int score;
+    private boolean session = false;
+    private long sessionStartTime;
+    private long sessionEndTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,7 +32,53 @@ public class TriviaListFragment extends Fragment {
         ListView list = view.findViewById(R.id.listView_trivia);
         triviaAdapter = new TriviaItemArrayAdapter(getActivity(), R.layout.row_trivia_item);
 
+        newGame();
+
+        list.setAdapter(triviaAdapter);
+    }
+
+    public TriviaItemArrayAdapter getTriviaAdapter() {
+        return triviaAdapter;
+    }
+
+    public void incrementScore() {
+        score++;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public long getSessionStartTime() {
+        return sessionStartTime;
+    }
+
+    public void setSessionStartTime(long startTime) {
+        sessionStartTime = startTime;
+    }
+
+    public long getSessionEndTime() {
+        return sessionEndTime;
+    }
+
+    public void setSessionEndTime(long endTime) {
+        sessionEndTime = endTime;
+    }
+
+    public boolean getSession() {
+        return session;
+    }
+
+    public void setSession(boolean thisSession) {
+        session = thisSession;
+    }
+
+    public void newGame() {
         try {
+            sessionStartTime = System.currentTimeMillis();
+            session = true;
+            score = 0;
+
             // Populate ArrayList of TriviaItem from parser
             // @Param: String response (json)
             ArrayList<TriviaItem> parsedItems = OpentdbParser.parseTriviaItems(OpentdbParser.SAMPLE_ITEMS);
@@ -45,21 +94,8 @@ public class TriviaListFragment extends Fragment {
             // Start ongoing notification to track game session
             NotificationHelper.gameSession((MainActivity) getActivity());
 
-            // Set score to 0
-            score = 0;
-
         } catch (JSONException event) {
             System.out.println("/------------------------ Error: API parser failed. --------------------------/");
         }
-
-        list.setAdapter(triviaAdapter);
     }
-
-    public TriviaItemArrayAdapter getTriviaAdapter() {
-        return triviaAdapter;
-    }
-
-    public void incrementScore() { score++; }
-
-    public int getScore() { return score; }
 }

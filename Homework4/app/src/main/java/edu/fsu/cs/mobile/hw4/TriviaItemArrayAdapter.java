@@ -33,7 +33,6 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         TextView difficulty;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

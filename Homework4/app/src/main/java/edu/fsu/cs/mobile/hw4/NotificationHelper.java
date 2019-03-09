@@ -4,15 +4,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 
 class NotificationHelper {
-    private static boolean session = false;
-    private static long sessionStartTime;
-    private static long sessionEndTime;
-
     // Display number of fetched questions in a notification
     static void fetchedQuestions(AppCompatActivity activity) {
         final int NOTIFICATION_ID = 0;
@@ -55,10 +52,6 @@ class NotificationHelper {
         int size = adapter.getCount();
 
         // Setup notification content
-        if(!session) {
-            sessionStartTime = System.currentTimeMillis();
-            session = true;
-        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         builder.setContentTitle("Current Score: " + fragment.getScore() + "")
                 .setContentText("Questions Remaining: " + size)
@@ -67,14 +60,17 @@ class NotificationHelper {
                 .setOnlyAlertOnce(true)
                 .setOngoing(true);
 
-        // Set chronometer if game is still going, otherwise, disable
+        // Start timer on game start
+        //    If there are no questions left, stop timer
         if(adapter.getCount() == 0) {
-            sessionEndTime = System.currentTimeMillis();
+            fragment.setSessionEndTime(System.currentTimeMillis());
             builder.setUsesChronometer(false)
-                    .setWhen(sessionEndTime);
+                    .setWhen(fragment.getSessionEndTime());
+            DialogFragment dialog = TriviaCompleteDialog.newInstance(fragment.getScore(), fragment.getSessionEndTime() - fragment.getSessionStartTime());
+            dialog.show(activity.getSupportFragmentManager(), TriviaCompleteDialog.TAG);
         } else {
             builder.setUsesChronometer(true)
-                    .setWhen(sessionStartTime);
+                    .setWhen(fragment.getSessionStartTime());
         }
 
         // Create channel and push notification
