@@ -71,8 +71,6 @@ class NotificationHelper {
 
             // Set High Score Preference
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
-            System.out.println(fragment.getScore());
-            System.out.println(Integer.parseInt(sharedPreferences.getString(SettingsFragment.KEY_HIGH_SCORE, "0")));
             if(fragment.getScore() > Integer.parseInt(sharedPreferences.getString(SettingsFragment.KEY_HIGH_SCORE, "0"))) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SettingsFragment.KEY_HIGH_SCORE, Integer.toString(fragment.getScore()));

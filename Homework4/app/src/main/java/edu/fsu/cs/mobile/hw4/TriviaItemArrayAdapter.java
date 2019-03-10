@@ -139,4 +139,10 @@ public class TriviaItemArrayAdapter extends ArrayAdapter<TriviaItem> {
         }
         notifyDataSetChanged();
     }
+
+    @Override
+    public void clear() {
+        triviaItems.clear();
+        notifyDataSetChanged();
+    }
 }

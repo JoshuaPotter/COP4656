@@ -24,12 +24,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         // Show existing saved preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if(sharedPreferences.contains(KEY_QUESTIONS_DIFFICULTY)) {
-            findPreference(KEY_QUESTIONS_DIFFICULTY).setSummary(sharedPreferences.getString(KEY_QUESTIONS_DIFFICULTY, "any"));
-        }
-        if(sharedPreferences.contains(KEY_QUESTIONS_AMOUNT)) {
-            findPreference(KEY_QUESTIONS_AMOUNT).setSummary(sharedPreferences.getString(KEY_QUESTIONS_AMOUNT, "5"));
-        }
+        findPreference(KEY_QUESTIONS_DIFFICULTY).setSummary(sharedPreferences.getString(KEY_QUESTIONS_DIFFICULTY, "any"));
+        findPreference(KEY_QUESTIONS_AMOUNT).setSummary(sharedPreferences.getString(KEY_QUESTIONS_AMOUNT, "5"));
         findPreference(KEY_HIGH_SCORE).setSummary(sharedPreferences.getString(KEY_HIGH_SCORE, "0"));
     }
 

@@ -2,6 +2,7 @@
 package edu.fsu.cs.mobile.hw4;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -82,58 +83,23 @@ public class TriviaListFragment extends Fragment {
     }
 
     public void newGame() {
-        try {
-            sessionStartTime = System.currentTimeMillis();
-            session = true;
-            score = 0;
+        triviaAdapter.clear();
 
-            // Get preferences for API request
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String amount = sharedPreferences.getString(SettingsFragment.KEY_QUESTIONS_AMOUNT, "5");
-            String difficulty = sharedPreferences.getString(SettingsFragment.KEY_QUESTIONS_DIFFICULTY, "any");
+        sessionStartTime = System.currentTimeMillis();
+        session = true;
+        score = 0;
 
-            // Create Volley Request
-            HttpURLConnection urlConnection = null;
-            try {
-                String request_url = "https://opentdb.com/api.php?amount=" + amount + "&difficulty=" + difficulty + "/";
-                URL url = new URL(request_url);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(urlConnection.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                //print result
-                System.out.println(response.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                urlConnection.disconnect();
-            }
-
-            // Populate ArrayList of TriviaItem from parser
-            // @Param: String response (json)
-            ArrayList<TriviaItem> parsedItems = OpentdbParser.parseTriviaItems(OpentdbParser.SAMPLE_ITEMS);
-
-            // Add TriviaItems to adapter
-            for(TriviaItem item : parsedItems) {
-                triviaAdapter.add(item);
-            }
-
-            // Show notification for new questions
-            NotificationHelper.fetchedQuestions((MainActivity) getActivity());
-
-            // Start ongoing notification to track game session
-            NotificationHelper.gameSession((MainActivity) getActivity());
-
-        } catch (JSONException event) {
-            System.out.println("/------------------------ Error: API parser failed. --------------------------/");
+        // Get preferences for API request
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String amount = sharedPreferences.getString(SettingsFragment.KEY_QUESTIONS_AMOUNT, "5");
+        String difficulty = sharedPreferences.getString(SettingsFragment.KEY_QUESTIONS_DIFFICULTY, "any");
+        String request_url = null;
+        if(difficulty.equals("any")) {
+            request_url = "https://opentdb.com/api.php?amount=" + amount;
+        } else {
+            request_url = "https://opentdb.com/api.php?amount=" + amount + "&difficulty=" + difficulty;
         }
+
+        new GetQuestions(getActivity()).execute(request_url);
     }
 }

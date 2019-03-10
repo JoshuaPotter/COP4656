@@ -56,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
                 trans.add(R.id.fragment_container, fragment, TriviaItemFragment.TAG);
                 trans.commit();
                 return true;
+            case R.id.menu_item_new:
+                TriviaListFragment listFragment = ((TriviaListFragment) getSupportFragmentManager()
+                        .findFragmentByTag(TriviaListFragment.TAG));
+                listFragment.newGame();
+                return true;
             case R.id.menu_item_exit:
                 // Exit Activity
                 finish();
