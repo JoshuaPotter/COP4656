@@ -111,6 +111,4 @@ public class TriviaItem implements Parcelable {
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
-
-
 }

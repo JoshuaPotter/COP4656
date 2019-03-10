@@ -1,7 +1,9 @@
 // TriviaListFragment
 package edu.fsu.cs.mobile.hw4;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+
 
 public class TriviaListFragment extends Fragment {
     public static final String TAG = TriviaListFragment.class.getCanonicalName();
@@ -78,6 +86,36 @@ public class TriviaListFragment extends Fragment {
             sessionStartTime = System.currentTimeMillis();
             session = true;
             score = 0;
+
+            // Get preferences for API request
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String amount = sharedPreferences.getString(SettingsFragment.KEY_QUESTIONS_AMOUNT, "5");
+            String difficulty = sharedPreferences.getString(SettingsFragment.KEY_QUESTIONS_DIFFICULTY, "any");
+
+            // Create Volley Request
+            HttpURLConnection urlConnection = null;
+            try {
+                String request_url = "https://opentdb.com/api.php?amount=" + amount + "&difficulty=" + difficulty + "/";
+                URL url = new URL(request_url);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(urlConnection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                //print result
+                System.out.println(response.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                urlConnection.disconnect();
+            }
 
             // Populate ArrayList of TriviaItem from parser
             // @Param: String response (json)

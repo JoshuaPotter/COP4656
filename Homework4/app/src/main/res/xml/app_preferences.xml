@@ -13,7 +13,7 @@
             android:entries="@array/question_amount"
             android:entryValues="@array/question_amount_values"
             android:defaultValue="@array/question_amount_values" />
-        <MultiSelectListPreference
+        <ListPreference
             android:key="questions_difficulty"
             android:title="Difficulty"
             android:entries="@array/question_difficulty"

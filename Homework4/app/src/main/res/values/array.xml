@@ -16,10 +16,12 @@
         <item>Easy</item>
         <item>Medium</item>
         <item>Hard</item>
+        <item>Any</item>
     </string-array>
     <string-array name="question_difficulty_values">
         <item>easy</item>
         <item>medium</item>
         <item>hard</item>
+        <item>any</item>
     </string-array>
 </resources>

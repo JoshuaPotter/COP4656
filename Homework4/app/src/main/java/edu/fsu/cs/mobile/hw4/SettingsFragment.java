@@ -7,9 +7,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String TAG = TriviaItemFragment.class.getCanonicalName();
     public static final String KEY_QUESTIONS_AMOUNT = "questions_amount";
@@ -25,26 +22,27 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // Load the Preferences from the XML file
         addPreferencesFromResource(R.xml.app_preferences);
 
+        // Show existing saved preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        findPreference(KEY_QUESTIONS_AMOUNT).setSummary(sharedPreferences.getString(KEY_QUESTIONS_AMOUNT, "5"));
+        if(sharedPreferences.contains(KEY_QUESTIONS_DIFFICULTY)) {
+            findPreference(KEY_QUESTIONS_DIFFICULTY).setSummary(sharedPreferences.getString(KEY_QUESTIONS_DIFFICULTY, "any"));
+        }
+        if(sharedPreferences.contains(KEY_QUESTIONS_AMOUNT)) {
+            findPreference(KEY_QUESTIONS_AMOUNT).setSummary(sharedPreferences.getString(KEY_QUESTIONS_AMOUNT, "5"));
+        }
         findPreference(KEY_HIGH_SCORE).setSummary(sharedPreferences.getString(KEY_HIGH_SCORE, "0"));
-
-        String difficulties = sharedPreferences.getStringSet(KEY_QUESTIONS_DIFFICULTY, null).toString();
-        difficulties = difficulties.substring(1, difficulties.length()-1);
-        findPreference(KEY_QUESTIONS_DIFFICULTY).setSummary(difficulties);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // Update preference view when sharedPreferences is updated
         Preference preference = findPreference(key);
         switch(key) {
             case KEY_QUESTIONS_AMOUNT:
                 preference.setSummary(sharedPreferences.getString(key, "5"));
                 break;
             case KEY_QUESTIONS_DIFFICULTY:
-                String difficulties = sharedPreferences.getStringSet(key, null).toString();
-                difficulties = difficulties.substring(1, difficulties.length()-1);
-                preference.setSummary(difficulties);
+                preference.setSummary(sharedPreferences.getString(key, "any"));
                 break;
             case KEY_HIGH_SCORE:
                 preference.setSummary(sharedPreferences.getString(key, "0"));
