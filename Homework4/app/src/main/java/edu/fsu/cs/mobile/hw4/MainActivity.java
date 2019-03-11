@@ -1,10 +1,10 @@
 package edu.fsu.cs.mobile.hw4;
 
+import android.app.NotificationManager;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -62,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 listFragment.newGame();
                 return true;
             case R.id.menu_item_exit:
-                // Exit Activity
-                finish();
+                exitGame();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -79,5 +78,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void exitGame() {
+        // Cancel notifications
+        NotificationHelper.cancelAll(getApplicationContext());
+
+        // Exit Activity
+        finish();
     }
 }

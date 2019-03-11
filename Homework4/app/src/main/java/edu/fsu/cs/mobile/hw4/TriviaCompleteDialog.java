@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 public class TriviaCompleteDialog extends DialogFragment {
     public static final String TAG = TriviaCompleteDialog.class.getCanonicalName();
     private TriviaListFragment fragment;
+    private AppCompatActivity activity;
 
     public static TriviaCompleteDialog newInstance(int score, long time) {
         TriviaCompleteDialog fragment = new TriviaCompleteDialog();
@@ -45,7 +47,7 @@ public class TriviaCompleteDialog extends DialogFragment {
                 .setNegativeButton("Finish Game", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        getActivity().finish();
+                        ((MainActivity) getContext()).exitGame();
                     }
                 })
                 .create();

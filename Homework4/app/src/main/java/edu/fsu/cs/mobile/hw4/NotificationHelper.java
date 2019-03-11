@@ -99,4 +99,8 @@ class NotificationHelper {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
+    static void cancelAll(Context context) {
+        NotificationManagerCompat.from(context).cancelAll();
+    }
 }
