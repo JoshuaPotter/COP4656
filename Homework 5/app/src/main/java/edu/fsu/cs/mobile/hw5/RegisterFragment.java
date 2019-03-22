@@ -1,19 +1,23 @@
-package edu.fsu.cs.mobile.hw2;
+package edu.fsu.cs.mobile.hw5;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class RegisterUserActivity extends AppCompatActivity {
+public class RegisterFragment extends Fragment {
+    public static final String TAG = RegisterFragment.class.getCanonicalName();
+
     private EditText email;
     private EditText password;
     private EditText confirm_password;
@@ -23,23 +27,33 @@ public class RegisterUserActivity extends AppCompatActivity {
     private RadioGroup role;
     private CheckBox terms;
 
+    public RegisterFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_user);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_register, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         // setup variables
-        email = (EditText) findViewById(R.id.editText_email);
-        password = (EditText) findViewById(R.id.editText_password);
-        confirm_password = (EditText) findViewById(R.id.editText_confirm_password);
-        username = (EditText) findViewById(R.id.editText_name);
-        classes_label = (TextView) findViewById(R.id.textView_class);
-        classes = (Spinner) findViewById(R.id.spinner_classes);
-        role = (RadioGroup) findViewById(R.id.radioGroup_role);
-        terms = (CheckBox) findViewById(R.id.checkBox_terms);
+        email = (EditText) getActivity().findViewById(R.id.editText_email);
+        password = (EditText) getActivity().findViewById(R.id.editText_password);
+        confirm_password = (EditText) getActivity().findViewById(R.id.editText_confirm_password);
+        username = (EditText) getActivity().findViewById(R.id.editText_name);
+        classes_label = (TextView) getActivity().findViewById(R.id.textView_class);
+        classes = (Spinner) getActivity().findViewById(R.id.spinner_classes);
+        role = (RadioGroup) getActivity().findViewById(R.id.radioGroup_role);
+        terms = (CheckBox) getActivity().findViewById(R.id.checkBox_terms);
 
         // setup classes dropdown
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.classes, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.classes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         classes.setAdapter(adapter);
     }
@@ -50,7 +64,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         confirm_password.setError(null);
         username.setError(null);
         classes_label.setError(null);
-        ((RadioButton) findViewById(R.id.radioButton_instructor)).setError(null);
+        ((RadioButton) getActivity().findViewById(R.id.radioButton_instructor)).setError(null);
         terms.setError(null);
     }
 
@@ -73,6 +87,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         String confirm_password_val = confirm_password.getText().toString();
         String username_val = username.getText().toString();
         String classes_val = classes.getSelectedItem().toString();
+        String role_val = ((RadioButton) getActivity().findViewById(role.getCheckedRadioButtonId())).getText().toString();
         boolean terms_val = terms.isChecked();
 
         if(email_val.equals("")) {
@@ -111,7 +126,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         if(role.getCheckedRadioButtonId() == -1) {
             // did not select role
             error = true;
-            ((RadioButton) findViewById(R.id.radioButton_instructor)).setError("Required");
+            ((RadioButton) getActivity().findViewById(R.id.radioButton_instructor)).setError("Required");
 
 
             if(username_val.equals("")) {
@@ -122,9 +137,7 @@ public class RegisterUserActivity extends AppCompatActivity {
                 username.setError(null);
             }
         } else {
-            ((RadioButton) findViewById(R.id.radioButton_instructor)).setError(null);
-            role_val = ((RadioButton) findViewById(role.getCheckedRadioButtonId())).getText().toString();
-
+            ((RadioButton) getActivity().findViewById(R.id.radioButton_instructor)).setError(null);
             if(role_val.equals("Student")) {
                 // student
 
@@ -154,13 +167,13 @@ public class RegisterUserActivity extends AppCompatActivity {
             // process form if no errors found
 
             // check if email exists
-            ArrayAdapter<String> adapter;
-            String[] adminEmails = getResources().getStringArray(R.array.admins);
-            for(int i = 0; i < adminEmails.length; i++) {
-                if(email_val.equals(adminEmails[i])) {
-                    error = true;
-                }
-            }
+//            ArrayAdapter<String> adapter;
+//            String[] adminEmails = getResources().getStringArray(R.array.admins);
+//            for(int i = 0; i < adminEmails.length; i++) {
+//                if(email_val.equals(adminEmails[i])) {
+//                    error = true;
+//                }
+//            }
 
             if(error == false) {
                 email.setError(null);
@@ -174,8 +187,8 @@ public class RegisterUserActivity extends AppCompatActivity {
                     password.setError(null);
                     confirm_password.setError(null);
 
-                    // send intent
-                    Intent displayUser = new Intent(this, DisplayUserActivity.class);
+                    // Construct user profile and send to HomeActivity for display
+                    Intent homeActivity = new Intent(this, HomeActivity.class);
 
                     Bundle bundle = new Bundle();
                     bundle.putString("email", email_val);
@@ -184,8 +197,8 @@ public class RegisterUserActivity extends AppCompatActivity {
                     bundle.putString("classes", classes_val);
                     bundle.putString("role", role_val);
 
-                    displayUser.putExtras(bundle);
-                    startActivity(displayUser);
+                    homeActivity.putExtras(bundle);
+                    startActivity(homeActivity);
                 }
             } else {
                 // email exists
@@ -193,12 +206,4 @@ public class RegisterUserActivity extends AppCompatActivity {
             }
         }
 
-//        System.out.println(email_val);
-//        System.out.println(password_val);
-//        System.out.println(confirm_password_val);
-//        System.out.println(username_val);
-//        System.out.println(classes_val);
-//        System.out.println(role_val);
-//        System.out.println(terms_val);
-    }
 }
