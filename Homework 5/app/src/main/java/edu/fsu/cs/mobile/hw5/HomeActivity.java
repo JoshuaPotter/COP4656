@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -19,6 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView classes;
     private TextView role;
     private TextView lastlogin;
+    private ListView users;
     private Button passwordButton;
     private String passwordVal;
     private boolean showPassword;

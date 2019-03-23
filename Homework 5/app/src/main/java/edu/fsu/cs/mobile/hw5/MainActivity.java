@@ -46,4 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public void resetRegistrationForm(View view) {
         registerFragment.resetRegistrationForm(view);
     }
+
+    public void loginUser(View view) {
+        loginFragment.loginUser(view);
+    }
 }
