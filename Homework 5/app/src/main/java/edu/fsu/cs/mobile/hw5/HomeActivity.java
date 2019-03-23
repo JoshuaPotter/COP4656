@@ -1,5 +1,6 @@
 package edu.fsu.cs.mobile.hw5;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,6 +9,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -37,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
         classes = (TextView) findViewById(R.id.textView_class);
         role = (TextView) findViewById(R.id.textView_role);
         lastlogin = (TextView) findViewById(R.id.textView_lastlogin);
+        users = (ListView) findViewById(R.id.listView_users);
         passwordButton = (Button) findViewById(R.id.button_showPassword);
         showPassword = false;
 
@@ -49,6 +54,28 @@ public class HomeActivity extends AppCompatActivity {
                 throw new IllegalArgumentException("Null URI in Home Activity");
             }
             setupView(userUri);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        ContentValues values = getCurrentContentValues();
+        switch (item.getItemId()) {
+            case R.id.option_delete:
+//                onDelete(values);
+                return true;
+            case R.id.option_logout:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -87,6 +114,33 @@ public class HomeActivity extends AppCompatActivity {
             role.setText(sRole);
             classes.setText(sClassname);
             lastlogin.setText(sLastlogin);
+
+            // get all users
+            Cursor listCursor = getContentResolver().query(UserContract.CONTENT_URI, null, null, null, null);
+
+            if(cursor == null) {
+                return;
+            }
+
+            String[] columns = new String[] {
+                    UserContract.UserEntry._ID,
+                    UserContract.UserEntry.EMAIL,
+                    UserContract.UserEntry.LASTLOGIN
+            };
+
+            int[] textViewIds = new int[] {
+                    R.id.user_id,
+                    R.id.user_email,
+                    R.id.user_lastlogin
+            };
+
+            UserCursorAdapter adapter = new UserCursorAdapter(
+                    HomeActivity.this,
+                    R.layout.listview_users_row,
+                    listCursor,
+                    columns, textViewIds);
+
+            users.setAdapter(adapter);
         }
     }
 

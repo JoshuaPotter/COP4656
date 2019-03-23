@@ -107,6 +107,7 @@ public class LoginFragment extends Fragment {
                 int rowId = mCursor.getInt(mCursor.getColumnIndex(UserContract.UserEntry._ID));
 
                 newUri = ContentUris.withAppendedId(UserContract.CONTENT_URI, rowId);
+
             }
         }
 
