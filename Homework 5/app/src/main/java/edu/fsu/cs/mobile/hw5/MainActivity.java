@@ -4,9 +4,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
+    private LoginFragment loginFragment;
+    private RegisterFragment registerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,9 +19,11 @@ public class MainActivity extends AppCompatActivity {
         // Instantiate LoginFragment
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-         LoginFragment fragment = new LoginFragment();
-         transaction.add(R.id.frameLayout_main, fragment, LoginFragment.TAG);
-         transaction.commit();
+        loginFragment = new LoginFragment();
+        transaction.add(R.id.frameLayout_login, loginFragment, LoginFragment.TAG);
+        registerFragment = new RegisterFragment();
+        transaction.add(R.id.frameLayout_register, registerFragment, RegisterFragment.TAG);
+        transaction.commit();
 
     }
 
@@ -32,5 +37,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void registerUser(View view) {
+        registerFragment.registerUser(view);
+    }
+
+    public void resetRegistrationForm(View view) {
+        registerFragment.resetRegistrationForm(view);
     }
 }

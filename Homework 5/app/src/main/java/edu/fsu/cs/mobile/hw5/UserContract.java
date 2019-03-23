@@ -26,7 +26,7 @@ public class UserContract {
         static final String PASSWORD = "password";
         static final String NAME = "name";
         static final String ROLE = "role";
-        static final String CLASS = "class";
+        static final String CLASSNAME = "class";
         static final String LASTLOGIN = "lastlogin";
     }
 
@@ -47,7 +47,7 @@ public class UserContract {
                             + " %s TEXT," // COLUMN_CLASS
                             + " %s TEXT);", // COLUMN_LASTLOGIN
                     UserEntry.TABLE, UserEntry._ID, UserEntry.EMAIL,
-                    UserEntry.PASSWORD, UserEntry.NAME, UserEntry.ROLE, UserEntry.CLASS, UserEntry.LASTLOGIN);
+                    UserEntry.PASSWORD, UserEntry.NAME, UserEntry.ROLE, UserEntry.CLASSNAME, UserEntry.LASTLOGIN);
 
     public static final class MainDatabaseHelper extends SQLiteOpenHelper {
         MainDatabaseHelper(Context context) {

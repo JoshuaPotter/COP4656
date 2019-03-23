@@ -1,6 +1,8 @@
 package edu.fsu.cs.mobile.hw5;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class RegisterFragment extends Fragment {
     public static final String TAG = RegisterFragment.class.getCanonicalName();
@@ -58,7 +66,7 @@ public class RegisterFragment extends Fragment {
         classes.setAdapter(adapter);
     }
 
-    public void removeErrors(View view) {
+    public void removeErrors() {
         email.setError(null);
         password.setError(null);
         confirm_password.setError(null);
@@ -68,7 +76,7 @@ public class RegisterFragment extends Fragment {
         terms.setError(null);
     }
 
-    public void resetForm(View view) {
+    public void resetRegistrationForm(View view) {
         email.setText("");
         password.setText("");
         confirm_password.setText("");
@@ -76,7 +84,7 @@ public class RegisterFragment extends Fragment {
         classes.setSelection(0);
         role.clearCheck();
         terms.setChecked(false);
-        removeErrors(view);
+        removeErrors();
     }
 
     public void registerUser(View view) {
@@ -90,7 +98,7 @@ public class RegisterFragment extends Fragment {
         String role_val = ((RadioButton) getActivity().findViewById(role.getCheckedRadioButtonId())).getText().toString();
         boolean terms_val = terms.isChecked();
 
-        if(email_val.equals("")) {
+        if (email_val.equals("")) {
             // did not enter username
             error = true;
             email.setError("Required");
@@ -98,7 +106,7 @@ public class RegisterFragment extends Fragment {
             email.setError(null);
         }
 
-        if(password_val.equals("")) {
+        if (password_val.equals("")) {
             // did not enter password
             error = true;
             password.setError("Required");
@@ -106,7 +114,7 @@ public class RegisterFragment extends Fragment {
             password.setError(null);
         }
 
-        if(confirm_password_val.equals("")) {
+        if (confirm_password_val.equals("")) {
             // did not enter confirm password
             error = true;
             confirm_password.setError("Required");
@@ -114,7 +122,7 @@ public class RegisterFragment extends Fragment {
             confirm_password.setError(null);
         }
 
-        if(classes_val.equals("")) {
+        if (classes_val.equals("")) {
             // no class selected
             error = true;
 
@@ -123,13 +131,13 @@ public class RegisterFragment extends Fragment {
             classes_label.setError(null);
         }
 
-        if(role.getCheckedRadioButtonId() == -1) {
+        if (role.getCheckedRadioButtonId() == -1) {
             // did not select role
             error = true;
             ((RadioButton) getActivity().findViewById(R.id.radioButton_instructor)).setError("Required");
 
 
-            if(username_val.equals("")) {
+            if (username_val.equals("")) {
                 // did not enter name
                 error = true;
                 username.setError("Required");
@@ -138,11 +146,11 @@ public class RegisterFragment extends Fragment {
             }
         } else {
             ((RadioButton) getActivity().findViewById(R.id.radioButton_instructor)).setError(null);
-            if(role_val.equals("Student")) {
+            if (role_val.equals("Student")) {
                 // student
 
                 // only check name if student
-                if(username_val.equals("")) {
+                if (username_val.equals("")) {
                     // did not enter name
                     error = true;
                     username.setError("Required");
@@ -155,7 +163,7 @@ public class RegisterFragment extends Fragment {
             }
         }
 
-        if(terms_val == false) {
+        if (terms_val == false) {
             // did not agree to terms
             error = true;
             terms.setError("Required");
@@ -163,7 +171,7 @@ public class RegisterFragment extends Fragment {
             terms.setError(null);
         }
 
-        if(error == false) {
+        if (error == false) {
             // process form if no errors found
 
             // check if email exists
@@ -175,10 +183,10 @@ public class RegisterFragment extends Fragment {
 //                }
 //            }
 
-            if(error == false) {
+            if (error == false) {
                 email.setError(null);
 
-                if(!password_val.equals(confirm_password_val)) {
+                if (!password_val.equals(confirm_password_val)) {
                     // passwords do not match
                     error = true;
                     password.setError("Passwords do not match");
@@ -187,15 +195,16 @@ public class RegisterFragment extends Fragment {
                     password.setError(null);
                     confirm_password.setError(null);
 
+                    // Set ContentValues
+                    ContentValues values = getCurrentContentValues();
+                    Uri newUri = onInsert(values);
+
                     // Construct user profile and send to HomeActivity for display
-                    Intent homeActivity = new Intent(this, HomeActivity.class);
+                    Intent homeActivity = new Intent(getContext(), HomeActivity.class);
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("email", email_val);
-                    bundle.putString("password", password_val);
-                    bundle.putString("name", username_val);
-                    bundle.putString("classes", classes_val);
-                    bundle.putString("role", role_val);
+                    // put uri
+                    bundle.putString("uri", newUri.toString());
 
                     homeActivity.putExtras(bundle);
                     startActivity(homeActivity);
@@ -205,5 +214,35 @@ public class RegisterFragment extends Fragment {
                 email.setError("Email already exists.");
             }
         }
+    }
 
+    private ContentValues getCurrentContentValues() {
+        ContentValues values = new ContentValues();
+
+        String email_val = email.getText().toString().trim();
+        String password_val = password.getText().toString().trim();
+        String username_val = username.getText().toString().trim();
+        String classes_val = classes.getSelectedItem().toString().trim();
+        String role_val = ((RadioButton) getActivity().findViewById(role.getCheckedRadioButtonId())).getText().toString().trim();
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.US);
+        String current = dateFormat.format(date);
+
+        values.put(UserContract.UserEntry.EMAIL, email_val);
+        values.put(UserContract.UserEntry.PASSWORD, password_val);
+        values.put(UserContract.UserEntry.NAME, username_val);
+        values.put(UserContract.UserEntry.CLASSNAME, classes_val);
+        values.put(UserContract.UserEntry.ROLE, role_val);
+        values.put(UserContract.UserEntry.LASTLOGIN, current);
+
+        resetRegistrationForm(getView());
+
+        return values;
+    }
+
+    public Uri onInsert(ContentValues values) {
+        final Uri newUri = getContext().getContentResolver().insert(UserContract.CONTENT_URI, values);
+        assert(newUri != null);
+        return newUri;
+    }
 }

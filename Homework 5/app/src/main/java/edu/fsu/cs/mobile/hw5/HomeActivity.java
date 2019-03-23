@@ -1,6 +1,8 @@
 package edu.fsu.cs.mobile.hw5;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView name;
     private TextView classes;
     private TextView role;
+    private TextView lastlogin;
     private Button passwordButton;
     private String passwordVal;
     private boolean showPassword;
@@ -31,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         name = (TextView) findViewById(R.id.textView_name);
         classes = (TextView) findViewById(R.id.textView_class);
         role = (TextView) findViewById(R.id.textView_role);
+        lastlogin = (TextView) findViewById(R.id.textView_lastlogin);
         passwordButton = (Button) findViewById(R.id.button_showPassword);
         showPassword = false;
 
@@ -38,16 +42,49 @@ public class HomeActivity extends AppCompatActivity {
         bundle = intent.getExtras();
 
         if(bundle != null) {
-            email.setText(bundle.getString("email"));
-            password.setText("********");
-            classes.setText(bundle.getString("classes"));
-            role.setText(bundle.getString("role"));
-
-            if(bundle.getString("name").toString().equals("")) {
-                name.setText("n/a");
-            } else {
-                name.setText(bundle.getString("name"));
+            Uri userUri = Uri.parse(bundle.getString("uri"));
+            if(userUri == null) {
+                throw new IllegalArgumentException("Null URI in Home Activity");
             }
+            setupView(userUri);
+        }
+    }
+
+    public void setupView(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if(cursor == null) {
+            return; // nothing to show
+        }
+
+        if(cursor.getCount() > 0) {
+            cursor.moveToNext();
+
+            String sEmail = cursor.getString(cursor.getColumnIndex(
+                    UserContract.UserEntry.EMAIL
+            ));
+            String sPassword = cursor.getString(cursor.getColumnIndex(
+                    UserContract.UserEntry.PASSWORD
+            ));
+            String sName = cursor.getString(cursor.getColumnIndex(
+                    UserContract.UserEntry.NAME
+            ));
+            String sRole = cursor.getString(cursor.getColumnIndex(
+                    UserContract.UserEntry.ROLE
+            ));
+            String sClassname = cursor.getString(cursor.getColumnIndex(
+                    UserContract.UserEntry.CLASSNAME
+            ));
+            String sLastlogin = cursor.getString(cursor.getColumnIndex(
+                    UserContract.UserEntry.LASTLOGIN
+            ));
+
+            email.setText(sEmail);
+            passwordVal = sPassword;
+            password.setText("********");
+            name.setText(sName);
+            role.setText(sRole);
+            classes.setText(sClassname);
+            lastlogin.setText(sLastlogin);
         }
     }
 
@@ -57,7 +94,7 @@ public class HomeActivity extends AppCompatActivity {
             passwordButton.setText("Show Password");
             showPassword = false;
         } else {
-            password.setText(bundle.getString("password"));
+            password.setText(passwordVal);
             passwordButton.setText("Hide Password");
             showPassword = true;
         }
