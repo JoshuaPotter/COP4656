@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Trivia Game</string>
-    <string name="settings">Settings</string>
-    <string name="exit">Exit</string>
-    <string name="new_game">New Game</string>
-</resources>

@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +13,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity {
     private TextView email;
@@ -29,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     private String passwordVal;
     private boolean showPassword;
     private Bundle bundle;
+    private UserCursorAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +71,10 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        ContentValues values = getCurrentContentValues();
         switch (item.getItemId()) {
             case R.id.option_delete:
-//                onDelete(values);
+                ContentValues values = getCurrentContentValues();
+                onDelete(values);
                 return true;
             case R.id.option_logout:
                 finish();
@@ -134,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
                     R.id.user_lastlogin
             };
 
-            UserCursorAdapter adapter = new UserCursorAdapter(
+            adapter = new UserCursorAdapter(
                     HomeActivity.this,
                     R.layout.listview_users_row,
                     listCursor,
@@ -156,4 +161,34 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    public ContentValues getCurrentContentValues() {
+        ContentValues values = new ContentValues();
+
+        String email_val = email.getText().toString().trim();
+        String password_val = passwordVal.trim();
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss", Locale.US);
+        String current = dateFormat.format(date);
+
+        values.put(UserContract.UserEntry.EMAIL, email_val);
+        values.put(UserContract.UserEntry.PASSWORD, password_val);
+        values.put(UserContract.UserEntry.LASTLOGIN, current);
+
+        return values;
+    }
+
+    public void onDelete(ContentValues values) {
+        String email = values.getAsString(UserContract.UserEntry.EMAIL);
+        String password = values.getAsString(UserContract.UserEntry.PASSWORD);
+
+        String[] args = new String[]{ email, password };
+        String where = UserContract.UserEntry.EMAIL + " = ? AND " + UserContract.UserEntry.PASSWORD + " = ?";
+
+        int numDeletes = getContentResolver().delete(UserContract.CONTENT_URI, where, args);
+
+        Toast toast = Toast.makeText(getApplicationContext(), "Deleted " + numDeletes, Toast.LENGTH_SHORT);
+        toast.show();
+
+        finish();
+    }
 }

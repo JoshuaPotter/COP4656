@@ -54,7 +54,9 @@ public class LoginFragment extends Fragment {
 
         if(newUri != null) {
             email.setError(null);
-            password.setError(null);
+
+            // Update last login value
+            updateLogin(getCurrentContentValues());
 
             // Construct user profile and send to HomeActivity for display
             Intent homeActivity = new Intent(getContext(), HomeActivity.class);
@@ -71,13 +73,14 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private ContentValues getCurrentContentValues() {
+    public ContentValues getCurrentContentValues() {
         ContentValues values = new ContentValues();
 
         String email_val = email.getText().toString().trim();
         String password_val = password.getText().toString().trim();
+
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.US);
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss", Locale.US);
         String current = dateFormat.format(date);
 
         values.put(UserContract.UserEntry.EMAIL, email_val);
@@ -112,5 +115,27 @@ public class LoginFragment extends Fragment {
         }
 
         return newUri;
+    }
+
+    public void updateLogin(ContentValues values) {
+        String[] args = null;
+        String where = null;
+
+        if(values.containsKey(UserContract.UserEntry.EMAIL) && values.containsKey(UserContract.UserEntry.PASSWORD)) {
+            String email = values.getAsString(UserContract.UserEntry.EMAIL);
+            String password = values.getAsString(UserContract.UserEntry.PASSWORD);
+
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss", Locale.US);
+            String current = dateFormat.format(date);
+            values.put(UserContract.UserEntry.LASTLOGIN, current);
+
+            where = UserContract.UserEntry.EMAIL + " = ? AND " + UserContract.UserEntry.PASSWORD + " = ?";
+            args = new String[] {email, password};
+        }
+
+        int cnt = getActivity().getContentResolver().update(UserContract.CONTENT_URI, values, where, args);
+
+
     }
 }

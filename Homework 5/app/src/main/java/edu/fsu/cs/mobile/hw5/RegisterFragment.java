@@ -225,7 +225,7 @@ public class RegisterFragment extends Fragment {
         String classes_val = classes.getSelectedItem().toString().trim();
         String role_val = ((RadioButton) getActivity().findViewById(role.getCheckedRadioButtonId())).getText().toString().trim();
         Date date = Calendar.getInstance().getTime();
-        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss", Locale.US);
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd hh:mm:ss", Locale.US);
         String current = dateFormat.format(date);
 
         values.put(UserContract.UserEntry.EMAIL, email_val);
