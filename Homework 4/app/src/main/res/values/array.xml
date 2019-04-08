@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="question_amount">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="question_amount_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="question_difficulty">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+        <item>Any</item>
+    </string-array>
+    <string-array name="question_difficulty_values">
+        <item>easy</item>
+        <item>medium</item>
+        <item>hard</item>
+        <item>any</item>
+    </string-array>
+</resources>
